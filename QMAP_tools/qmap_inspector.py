@@ -318,7 +318,8 @@ class QMAPInspector():
         column: str,
         bin_range: tuple[float, float],
         bin_number: int = 100,
-        custom_lf : LazyFrame | None = None
+        custom_lf : LazyFrame | None = None,
+        weight_col: str | None = "area",
     ) -> tuple[np.ndarray, np.ndarray]:
         """
         Linear histogram using streaming Polars aggregation.
@@ -335,6 +336,19 @@ class QMAPInspector():
         bins: np.ndarray = np.linspace(min_val, max_val, bin_number + 1)
         bin_width: float = (max_val - min_val) / bin_number
 
+        select_exprs: list[pl.Expr] = [
+            ((pl.col(column) - min_val) / bin_width)
+            .floor()
+            .cast(pl.UInt32)
+            .alias("bin"),
+        ]
+
+        if weight_col is not None:
+            select_exprs.append(
+                pl.col(weight_col).alias("weight")
+            )
+        
+
         hist: DataFrame = (
             (self.full_db if custom_lf is None else custom_lf)
             .filter(
@@ -342,14 +356,17 @@ class QMAPInspector():
             )
             .select(
                 (
-                    ((pl.col(column) - min_val) / bin_width)
-                    .floor()
-                    .cast(pl.UInt32)
-                    .alias("bin")
+                    
                 )
             )
             .group_by("bin")
-            .len(name="count")
+            .agg(
+                (
+                    pl.col("weight").sum().alias("count")
+                    if weight_col is not None
+                    else pl.len().alias("count")
+                )
+            )
             .collect(engine="streaming")
         )
 
