@@ -354,11 +354,7 @@ class QMAPInspector():
             .filter(
                 pl.col(column).is_between(min_val, max_val, closed="left")
             )
-            .select(
-                (
-                    
-                )
-            )
+            .select(select_exprs)
             .group_by("bin")
             .agg(
                 (
