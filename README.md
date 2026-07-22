@@ -1,4 +1,10 @@
-The QMAP which produces a parquet database with the following schema.
+## How to use
+
+1. Clone this repo into a desired directory
+2. You will need to get the QMAP database.
+3. Place the QMAP database in a suitable path (the defaults for which are defined by QMAPInspector) or give the suitable directories when initialising the QMAPInspector
+
+## QMAP Schema (with description)
 
 | Column | Type | Description |
 |---|---|---|
