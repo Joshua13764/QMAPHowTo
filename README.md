@@ -2,9 +2,9 @@
 
 1. Clone this repo into a desired directory
 2. You will need to get the QMAP database.
-3. Place the QMAP database in a suitable path (the defaults for which are defined by QMAPInspector) or give the suitable directories when initialising the QMAPInspector
+3. Place the QMAP database in a suitable path (the defaults for which are defined by the QMAPInspector) or give the suitable directories when initialising the QMAPInspector
 
-## QMAP Schema (with description)
+## QMAP Schema (with descriptions)
 
 | Column | Type | Description |
 |---|---|---|
