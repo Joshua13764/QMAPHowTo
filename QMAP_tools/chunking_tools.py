@@ -148,19 +148,20 @@ class ChunkingTools:
 
             arr: np.ndarray = process_chunk(chunk)
 
-            chunk_df: DataFrame = chunk_lf.collect()
+            chunk_df: DataFrame = chunk_lf.select("i", "j").collect()
 
             values: np.ndarray = arr[
                 chunk_df["i"].to_numpy() - chunk.i_min,
                 chunk_df["j"].to_numpy() - chunk.j_min
             ]
 
-            chunk_df = chunk_df.with_columns(
+            chunk_lf = chunk_lf.with_columns(
                 pl.Series(col_name, values)
             )
 
-            chunk_df.write_parquet(
-                export_folder / f"{chunk.short_name}.parquet"
+            chunk_lf.sink_parquet(
+                export_folder / f"{chunk.short_name}.parquet",
+                engine="streaming"
             )
 
     @staticmethod

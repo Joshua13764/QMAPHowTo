@@ -218,3 +218,4 @@ __marimo__/
 .streamlit/secrets.toml
 
 QMAP_data
+QMAP_data_exports
